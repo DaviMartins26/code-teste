@@ -107,3 +107,7 @@ Em seguida, execute os seguintes comandos na pasta raíz do projeto:
 O comando watch vai assistir a pasta do seu projeto e recarregar automaticamente o navegador em localhost:3000 quando houver alguma alteração, além de compilar os arquivos JavaScript e SCSS para dentro de public.
 
 Após rodar o comando db:seed, você será capaz de fazer o login com o usuário cliente joaodasilva@gmail.com, e com o usuário veterinário mariovet@gmail.com, ambos com senha 123123123.
+
+## 🧠 COMENTARIOS
+
+A foto do cachoro deveria persistir no caminho code-teste/storage/app/public/patients . Mas isso não acontece, acredito que seja por algum problema de configuação que eu desconheço. Somente o nome do arquivo está sendo salvo no campo imagem no BD.

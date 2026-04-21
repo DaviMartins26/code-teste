@@ -19,7 +19,9 @@ class Patient extends Model {
         'user_id',
         'name',
 		'gender',
-		'birthdate'
+		'birthdate',
+		'image' // permite adicionar imagem agora
+
 	];
 
 	protected $dates = [

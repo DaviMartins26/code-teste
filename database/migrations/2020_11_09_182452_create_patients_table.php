@@ -21,6 +21,7 @@ class CreatePatientsTable extends Migration
 			$table->enum('gender', [ 'M', 'F' ])->nullable();
 			$table->date('birthdate')->nullable();
             $table->timestamps();
+            //$table->string('image')->nullable(); 
         });
     }
 
