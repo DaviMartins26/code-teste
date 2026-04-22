@@ -85,20 +85,24 @@ class SiteController extends Controller {
 	}
 
 	public function postCreateAppointment(Request $request) {
-		// Validação dos dados que vem do formulário
-		$request->validate([
-			'patient_id' => 'required',
+		//Pegamos o ID do pet (patient_id) e a data que vem da View
+   		 $request->validate([
+			'patient' => 'required',
 			'date' => 'required',
-		]);
+			'time' => 'required',
+		 ]);
+
+		//juntando a data com horario pq estão separados 
+		$dateTimeString = $request->date . ' ' . $request->time;
+    	$dateTime = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $dateTimeString);
 
 		// Criando o agendamento
-		Appointment::create([
-			'user_id' => auth()->id(), // ID do cliente logado
-			'patient_id' => $request->patient_id,
-			'vet_id' => $request->vet_id ?? null, // Opcional, dependendo do seu formulário
-			'date' => \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->date), 
-			'notes' => $request->notes,
-			'status' => 'pending' // Definindo como pendente por padrão
+		\App\Models\Appointment::create([
+        'user_id' => auth()->id(),
+        'patient_id' => $request->patient, // O nome no select é 'patient'
+        'date' => $dateTime,
+        'status' => 'pending',
+    	'notes' => null // Notas o veterinario preenche depois
 		]);
 
 		return redirect()->route('client')->with('toast', 'Consulta agendada com sucesso!');
@@ -110,13 +114,25 @@ class SiteController extends Controller {
     	$appointments = Appointment::with('patient', 'user')->orderBy('date', 'asc')->get();
     
     	return view('vet.dashboard', compact('appointments')); 
-    	// (O nome da view 'vet.dashboard' deve ser o que você tem aí)
 	}
 
 	public function getEditAppointment($appointment_id) {
 		// - TODO: Retornar consulta
 		$appointment = null;
 		return view('edit-appointment', [ 'appointment' => $appointment ]);
+	}
+
+	
+	public function postEditAppointment($appointment_id, Request $request) {
+    $appointment = \App\Models\Appointment::findOrFail($appointment_id);
+
+    // O veterinário escreve as notas e o sistema marca como finalizada
+    $appointment->update([
+        'notes' => $request->notes,
+        'status' => 'finalized'
+    ]);
+
+    return redirect()->route('vet')->with('toast', 'Consulta finalizada com sucesso.');
 	}
 
 }

@@ -7,7 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Appointment extends Model
 {
-    protected $fillable = ['user_id', 'patient_id', 'vet_id', 'date', 'notes', 'status'];
+    protected $fillable = [
+        'user_id',
+        'patient_id', 
+        'vet_id', 
+        'date', 
+        'notes', 
+        'status'
+        ];
 
     // Relacionamento: A consulta pertence a um paciente (pet)
     public function patient() {
