@@ -110,12 +110,24 @@ Após rodar o comando db:seed, você será capaz de fazer o login com o usuário
 
 ## 🧠 COMENTARIOS
 
-Tive dificuldades iniciais de rodar o projeto no meu ambiente de trabalho, por faltar algumas dependencias de path na variavel do ambiente, oque foi superado após pesquisar sobre essa estruturação de codigo. Sendo a primeira vez que trabalho com essa estrutura em php, oque dificultou um pouco começar, mas acredito que compreendi algumas coisas já.
+1. Desafios de Ambiente e Adaptação
+No início do projeto, enfrentei dificuldades para configurar o ambiente local devido a dependências de PATH nas variáveis de sistema. Após pesquisas a estrutura do projeto foi devidamente configurada. Como foi meu primeiro contato com esta arquitetura específica em PHP, houve uma curva de aprendizado inicial grande, mas que foi superada através da análise da estrutura de pastas e do fluxo de rotas/controllers(Minha experiencia arterior com esse tipo de arquitetura foi em Java).
 
-A foto do cachoro deveria persistir no caminho code-teste/storage/app/public/patients . Mas isso não acontece, acredito que seja por algum problema de configuação que eu desconheço. Somente o nome do arquivo está sendo salvo no campo imagem no BD.
+2. Gestão de Arquivos e Persistência de Dados
+Não consegui salvar a imagem upada dentro do programa, embora o nome do arquivo seja devidamente tratado e salvo no banco de dados (coluna image), a persistência no sistema de arquivos apresentou dificuldades, possivelmente relacionadas a permissões de escrita ou configurações de link simbólico no ambiente Windows.
 
-*A primeira função possuia um problema em salvar a raça(Breed) na tabela, oque foi corrido no proximo commit
+Recuperação de Código: Durante o desenvolvimento, houve uma inconsistência no arquivo edit-patient.blade.php, que foi prontamente resolvida utilizando controle de versão (Rollback), garantindo a integridade da funcionalidade de edição do paciente.
 
-A função de agendamento foi implementada sem muitas dificuldade, exceto por problemas de imigrate e para salvar o horario no banco, pois ele é salvo em um unico campo, precisei juntar os campos de data e hora pelo codigo(tambem é possivel salvar data e hora separados no banco, evitando assim de fazer a função em codigo, porém opitei por ela mesmo assim.)
+3. Implementações e Correções
+Correção de Bug: Detectei um problema na persistência do campo "Raça" (Breed) na tabela de pacientes. A lógica foi corrigida e validada nos commits seguinte.
 
-Ouve uma confusão aonde destrui o codigo do edit-patient.blade.php mas dei um Rollback no arquivo para a versão antiga.
+Módulo de Agendamento: * Implementei a funcionalidade de agendamento integrando os campos de data e hora da View em um único objeto DateTime no backend para otimização de consultas e ordenação.
+
+Gerenciei a criação da nova tabela appointments via Migrations, garantindo a integridade referencial entre usuários, pets e consultas.
+
+Fluxo do Veterinário: Implementei a listagem dinâmica de consultas e a funcionalidade de conclusão de atendimento, permitindo que o veterinário adicione observações médicas e atualize o status da consulta em tempo real.
+
+Em relação a segurança, alguns momentos me questionei de alguns metodos publicos, mas por não saber totalmente da estrutura do projeto e toda a comunicação interna opitei por não tocar por agora devido ao tempo limitado.
+
+4. Conclusão
+O projeto foi um desafio a ser enfrentaod e superado. Foquei em entregar um fluxo funcional e logicamente consistente, apesar de não atingir todos os objetivos(foto do paciente), acredito que foi feito um excelente trabalho com meu nivel de conhecimento na área.
