@@ -8,6 +8,8 @@ use App\Models\Patient;
 
 use Carbon\Carbon;
 
+use App\Models\Appointment; // para botão de agendamento
+
 class SiteController extends Controller {
 
     public function getIndex(Request $request) {
@@ -52,6 +54,7 @@ class SiteController extends Controller {
 		$filename = time() . '.' . $file->getClientOriginalExtension();
 		
 		// Força o salvamento direto na pasta pública do storage
+		// porem não está acontecendo
 		$file->move(storage_path('app/public/patients'), $filename);
 		
 		// Salva o caminho no banco
@@ -71,25 +74,43 @@ class SiteController extends Controller {
 	}
 
 	public function getAppointment($appointment_id) {
-		// - TODO: Retornar consulta
-		$appointment = null;
-		return view('appointment', [ 'appointment' => $appointment ]);
-	}
+    // Busca a consulta com os dados do paciente, do dono (user) e do veterinário (vet)
+    $appointment = Appointment::with(['patient', 'user', 'vet'])->findOrFail($appointment_id);
+
+    return view('client.view-appointment', compact('appointment'));
+}
 
 	public function getCreateAppointment() {
 		return view('create-appointment');
 	}
 
 	public function postCreateAppointment(Request $request) {
-		// - TODO: Agendar a consulta
-		return redirect()->route('client')->with('toast', 'Consulta marcada com sucesso.');
+		// Validação dos dados que vem do formulário
+		$request->validate([
+			'patient_id' => 'required',
+			'date' => 'required',
+		]);
+
+		// Criando o agendamento
+		Appointment::create([
+			'user_id' => auth()->id(), // ID do cliente logado
+			'patient_id' => $request->patient_id,
+			'vet_id' => $request->vet_id ?? null, // Opcional, dependendo do seu formulário
+			'date' => \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->date), 
+			'notes' => $request->notes,
+			'status' => 'pending' // Definindo como pendente por padrão
+		]);
+
+		return redirect()->route('client')->with('toast', 'Consulta agendada com sucesso!');
 	}
 
 	// ------------------ Veterinário ------------------
-	public function getVet(Request $request) {
-		// - TODO: Retornar todos os agendamentos
-		$appointments = [];
-		return view('vet', [ 'appointments' => $appointments ]);
+	public function getVet() {
+    // Busca todas as consultas agendadas
+    	$appointments = Appointment::with('patient', 'user')->orderBy('date', 'asc')->get();
+    
+    	return view('vet.dashboard', compact('appointments')); 
+    	// (O nome da view 'vet.dashboard' deve ser o que você tem aí)
 	}
 
 	public function getEditAppointment($appointment_id) {
