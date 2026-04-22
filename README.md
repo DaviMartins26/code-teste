@@ -110,4 +110,10 @@ Após rodar o comando db:seed, você será capaz de fazer o login com o usuário
 
 ## 🧠 COMENTARIOS
 
+Tive dificuldades iniciais de rodar o projeto no meu ambiente de trabalho, por faltar algumas dependencias de path na variavel do ambiente, oque foi superado após pesquisar sobre essa estruturação de codigo. Sendo a primeira vez que trabalho com essa estrutura em php, oque dificultou um pouco começar, mas acredito que compreendi algumas coisas já.
+
 A foto do cachoro deveria persistir no caminho code-teste/storage/app/public/patients . Mas isso não acontece, acredito que seja por algum problema de configuação que eu desconheço. Somente o nome do arquivo está sendo salvo no campo imagem no BD.
+
+*A primeira função possuia um problema em salvar a raça(Breed) na tabela, oque foi corrido no proximo commit
+
+A função de agendamento foi implementada sem muitas dificuldade, exceto por problemas de imigrate e para salvar o horario no banco, pois ele é salvo em um unico campo, precisei juntar os campos de data e hora pelo codigo(tambem é possivel salvar data e hora separados no banco, evitando assim de fazer a função em codigo, porém opitei por ela mesmo assim.)
