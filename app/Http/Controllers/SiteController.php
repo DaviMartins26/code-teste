@@ -113,15 +113,13 @@ class SiteController extends Controller {
     // Busca todas as consultas agendadas
     	$appointments = Appointment::with('patient', 'user')->orderBy('date', 'asc')->get();
     
-    	return view('vet.dashboard', compact('appointments')); 
+    	return view('vet', compact('appointments'));  // remoção do .dashboard
 	}
 
 	public function getEditAppointment($appointment_id) {
-		// - TODO: Retornar consulta
-		$appointment = null;
-		return view('edit-appointment', [ 'appointment' => $appointment ]);
+    $appointment = \App\Models\Appointment::with(['patient', 'user'])->findOrFail($appointment_id);
+    return view('edit-appointment', compact('appointment'));
 	}
-
 	
 	public function postEditAppointment($appointment_id, Request $request) {
     $appointment = \App\Models\Appointment::findOrFail($appointment_id);

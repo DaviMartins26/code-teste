@@ -117,3 +117,5 @@ A foto do cachoro deveria persistir no caminho code-teste/storage/app/public/pat
 *A primeira função possuia um problema em salvar a raça(Breed) na tabela, oque foi corrido no proximo commit
 
 A função de agendamento foi implementada sem muitas dificuldade, exceto por problemas de imigrate e para salvar o horario no banco, pois ele é salvo em um unico campo, precisei juntar os campos de data e hora pelo codigo(tambem é possivel salvar data e hora separados no banco, evitando assim de fazer a função em codigo, porém opitei por ela mesmo assim.)
+
+Ouve uma confusão aonde destrui o codigo do edit-patient.blade.php mas dei um Rollback no arquivo para a versão antiga.

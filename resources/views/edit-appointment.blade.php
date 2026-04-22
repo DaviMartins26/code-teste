@@ -1,69 +1,62 @@
 @extends('layouts.main')
-@section('title', 'Rusky Vet - A saúde do seu cão em primeiro lugar')
+@section('title', 'Rusky Vet - Detalhes da Consulta')
 @section('content')
-	<section class="py-6 border-bottom">
-		<div class="container text-center">
-			<h1>Consulta #1</h1>
+    <section class="py-6 border-bottom">
+        <div class="container text-center">
+            <h1>Consulta #{{ $appointment->id }}</h1>
 
-			<div class="row mt-4 justify-content-center">
-				<div class="col-md-10 text-left">
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-10 text-left">
+                    <div class="text-center mb-4">
+                        {{-- Foto do Pet vinda do banco --}}
+                        <img src="{{ $appointment->patient->image ? asset('storage/' . $appointment->patient->image) : 'https://via.placeholder.com/140' }}" class="radius" height="140">
+                    </div>
 
-					<div class="text-center mb-4">
-						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSDJVdoqib2dry6LTBDWU_0WWvWON_zdAMn_w&usqp=CAU" class="radius" height="140">
-					</div>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    <span class="badge {{ $appointment->status == 'finalized' ? 'badge-success' : 'badge-warning' }}">
+                                        {{ $appointment->status == 'finalized' ? 'FINALIZADA' : 'AGENDADA' }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Data e hora</th>
+                                <td>{{ $appointment->date->format('d/m/Y H:i') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nome do paciente</th>
+                                <td>{{ $appointment->patient->name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Raça</th>
+                                <td>{{ $appointment->patient->breed }}</td>
+                            </tr>
+                            <tr>
+                                <th>Dono</th>
+                                <td>{{ $appointment->user->name }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-					<table class="table">
-						<tbody>
-							<tr>
-								<th>Consulta</th>
-								<td>1</td>
-							</tr>
-							<tr>
-								<th>Status</th>
-								<td>AGENDADA</td>
-							</tr>
-							<tr>
-								<th>Data e hora</th>
-								<td>10/10/2020 10:10</td>
-							</tr>
-							<tr>
-								<th>Nome do paciente</th>
-								<td>Scooby-Doo</td>
-							</tr>
-							<tr>
-								<th>Raça</th>
-								<td>Dogue Alemão</td>
-							</tr>
-							<tr>
-								<th>Idade</th>
-								<td>7 dias</td>
-							</tr>
-							<tr>
-								<th>Dono</th>
-								<td>Salsicha Billy Rogers</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
+            <div class="row mt-6 justify-content-center">
+                <div class="col-md-6 text-left">
+                    {{-- O formulário agora envia para a rota de salvar --}}
+                    <form action="{{ route('vet.edit-appointment', $appointment->id) }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="notes">Observações do Veterinário</label>
+                            <textarea name="notes" rows="7" class="form-control" id="notes">{{ old('notes', $appointment->notes) }}</textarea>
+                        </div>
 
-			<div class="row mt-6 justify-content-center">
-				<div class="col-md-6 text-left">
-					<form action="" method="POST">
-						<div class="form-group">
-							<label for="notes">Observações</label>
-							<textarea name="notes" rows="7" class="form-control @error('notes') is-invalid @enderror" id="notes"></textarea>
-							@error('notes')
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ $message }}</strong>
-								</span>
-							@enderror
-						</div>
-
-						<button type="submit" class="btn btn-primary btn-block mt-4">Salvar e finalizar consulta</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</section>
+                        <button type="submit" class="btn btn-primary btn-block mt-4">Salvar e finalizar consulta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection

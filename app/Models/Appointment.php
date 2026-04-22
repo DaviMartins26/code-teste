@@ -16,6 +16,11 @@ class Appointment extends Model
         'status'
         ];
 
+    // protecao de datas e strigs
+    protected $casts = [
+        'date' => 'datetime',
+    ];
+
     // Relacionamento: A consulta pertence a um paciente (pet)
     public function patient() {
         return $this->belongsTo(Patient::class);
