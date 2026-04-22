@@ -50,15 +50,23 @@ class SiteController extends Controller {
     // Lógica da Foto
 	if ($request->hasFile('image')) {
 		$file = $request->file('image');
-		// Gera um nome único para a imagem
-		$filename = time() . '.' . $file->getClientOriginalExtension();
 		
-		// Força o salvamento direto na pasta pública do storage
-		// porem não está acontecendo
-		$file->move(storage_path('app/public/patients'), $filename);
+		// Gera um nome único: ex: 1619100000_bob.jpg
+		$filename = time() . '_' . $file->getClientOriginalName();
 		
-		// Salva o caminho no banco
-		$data['image'] = 'patients/' . $filename;
+		// Caminho físico direto na pasta public: public/img/patients
+		$publicPath = public_path('img/patients');
+
+		// Garante que a pasta existe, senão cria
+		if (!file_exists($publicPath)) {
+			mkdir($publicPath, 0755, true);
+		}
+
+		// Move o arquivo fisicamente para public/img/patients
+		$file->move($publicPath, $filename);
+		
+		// Salva o caminho relativo no banco: 'img/patients/1619100000_bob.jpg'
+		$data['image'] = 'img/patients/' . $filename;
 	}
 
     $patient->update($data);
@@ -117,10 +125,10 @@ class SiteController extends Controller {
 	}
 
 	public function getEditAppointment($appointment_id) {
-    $appointment = \App\Models\Appointment::with(['patient', 'user'])->findOrFail($appointment_id);
-    return view('edit-appointment', compact('appointment'));
+    	$appointment = \App\Models\Appointment::with(['patient', 'user'])->findOrFail($appointment_id);
+    	return view('edit-appointment', compact('appointment'));
 	}
-	
+
 	public function postEditAppointment($appointment_id, Request $request) {
     $appointment = \App\Models\Appointment::findOrFail($appointment_id);
 

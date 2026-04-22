@@ -9,14 +9,16 @@
                 <div class="col-md-10 text-left">
 
                     <div class="text-center mb-4">
-                        <img src="{{ $appointment->patient->image ? asset('storage/' . $appointment->patient->image) : 'https://via.placeholder.com/140' }}" class="radius" height="140">
+                        {{-- Mudança aqui: asset() agora aponta direto para o caminho salvo no banco --}}
+                        <img src="{{ $appointment->patient->image ? asset($appointment->patient->image) : 'https://via.placeholder.com/140?text=Sem+Foto' }}" class="radius" height="140">
                     </div>
 
                     <table class="table">
                         <tbody>
                             <tr>
                                 <th>Status</th>
-                                <td><span class="badge {{ $appointment->status == 'finalizada' ? 'badge-success' : 'badge-warning' }}">{{ strtoupper($appointment->status) }}</span></td>
+                                {{-- Ajustei o status para bater com o 'finalized' que estamos salvando no banco --}}
+                                <td><span class="badge {{ $appointment->status == 'finalized' ? 'badge-success' : 'badge-warning' }}">{{ $appointment->status == 'finalized' ? 'FINALIZADA' : 'AGENDADA' }}</span></td>
                             </tr>
                             <tr>
                                 <th>Data e hora</th>
